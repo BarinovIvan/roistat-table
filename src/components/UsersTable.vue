@@ -1,32 +1,38 @@
 <template>
   <section class="users-table">
-    <header class="users-table__header users-table__row">
-      <h3>Имя</h3>
-      <h3>Телефон</h3>
-    </header>
+    <table-header class="users-table__row" />
+
+    <main>
+      <users-list v-for="user in users" :user="user" />
+    </main>
   </section>
 </template>
 
 <script>
+import TableHeader from "./TableHeader";
+import UsersList from "./UsersList";
+
 export default {
-  name: "UsersTable"
+  name: "UsersTable",
+  components: {UsersList, TableHeader},
+  props: {
+    users: {
+      type: Array,
+      default: []
+    },
+  }
 }
 </script>
 
 <style scoped>
 .users-table {
-  width: 100%;
-  padding: 40px;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
-.users-table__header {
-  display: flex;
-  justify-content: space-around;
-}
-
-.users-table__row > * {
-  width: 100%;
-  border: 1px solid red;
-  padding: 10px 20px;
+@media  (max-width: 768px) {
+  .users-table {
+    padding: 10px;
+  }
 }
 </style>
