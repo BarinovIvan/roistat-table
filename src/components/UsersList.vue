@@ -48,7 +48,6 @@ export default {
     },
     toggleIcon() {
       if (!this.hasChildren) return null;
-
       return this.isExpanded ? "-" : "+";
     },
   },
@@ -59,13 +58,11 @@ export default {
   methods: {
     toggleExpand() {
       if (!this.hasChildren) return;
-
       this.isExpanded = !this.isExpanded;
     },
 
     getUserNamePadding: function() {
       const PADDING_MULTIPLIER = getUsersListPaddingMultiplier();
-
       this.userNamePadding = { paddingLeft: `${this.level * PADDING_MULTIPLIER}px` };
     },
 
