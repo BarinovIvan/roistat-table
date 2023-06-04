@@ -25,7 +25,14 @@ import UsersTable from "./components/UsersTable";
 import CustomDialog from "./components/ui/CustomDialog";
 import AddUserForm from "./components/AddUserForm";
 import CustomButton from "./components/ui/CustomButton";
-import {findUserById, generateId, getDataFromLS, saveDataToLS, unwrapArray} from "./helpers/usersTableHeader";
+import {
+  findUserById,
+  generateId,
+  getDataFromLS,
+  saveDataToLS,
+  sortObjects,
+  unwrapArray
+} from "./helpers/usersTableHelper";
 
 export default {
   name: 'App',
@@ -91,13 +98,7 @@ export default {
       this.sortUsers();
     },
     sortUsers() {
-      this.users.sort((a, b) => {
-        const optionA = a[this.sortingOption];
-        const optionB = b[this.sortingOption];
-
-        const comparisonValue = optionA.localeCompare(optionB);
-        return comparisonValue * this.sortingOrder;
-      });
+      sortObjects(this.sortedUsers, this.sortingOption, this.sortingOrder);
     },
     unwrapUserArray() {
       this.flatUsers = unwrapArray(this.users);

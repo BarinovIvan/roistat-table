@@ -43,6 +43,25 @@ export const removeChildrenFromObject = (object) => {
   return result;
 }
 
+export const sortObjects = (arr, sortingOption, sortingOrder) => {
+  arr.sort((a, b) => {
+    const optionA = a[sortingOption];
+    const optionB = b[sortingOption];
+
+    const strippedOptionA = optionA.startsWith('+') ? optionA.substring(1) : optionA;
+    const strippedOptionB = optionB.startsWith('+') ? optionB.substring(1) : optionB;
+
+    const comparisonValue = strippedOptionA.localeCompare(strippedOptionB);
+    return comparisonValue * sortingOrder;
+  });
+
+  arr.forEach((obj) => {
+    if(obj.children && obj.children.length) {
+      sortObjects(obj.children, sortingOption, sortingOrder);
+    }
+  });
+}
+
 export const getDataFromLS = (propertyName) => {
   return JSON.parse(localStorage.getItem(propertyName));
 }
