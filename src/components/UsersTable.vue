@@ -1,6 +1,10 @@
 <template>
   <section class="users-table">
-    <table-header class="users-table__row" />
+    <users-table-header
+      :headers="headers"
+      class="users-table__row"
+      @header-is-clicked="onHeaderClick"
+    />
 
     <main>
       <users-list v-for="user in users" :key="user.id" :user="user" />
@@ -9,16 +13,45 @@
 </template>
 
 <script>
-import TableHeader from "./TableHeader";
+import UsersTableHeader from "./UsersTableHeader";
 import UsersList from "./UsersList";
 
 export default {
   name: "UsersTable",
-  components: {UsersList, TableHeader},
+  components: {UsersList, UsersTableHeader},
   props: {
     users: {
       type: Array,
       default: []
+    },
+  },
+  data() {
+    return {
+      headers: [
+        { name: 'Имя', value: 'name', checked: null },
+        { name: 'Телефон', value: 'phone', checked: null }
+      ]
+    }
+  },
+  methods: {
+    onHeaderClick(headerValue) {
+    this.uncheckAllHeadersExcept(headerValue);
+    this.toggleHeaderCheckedStatus(headerValue);
+    this.emitHeaderClickedEvent(headerValue);
+    },
+    uncheckAllHeadersExcept(headerValue) {
+      this.headers.forEach(header => {
+        if (header.value !== headerValue) {
+          header.checked = null
+        }
+      });
+    },
+    toggleHeaderCheckedStatus(headerValue) {
+      const header = this.headers.find(((header) => header.value === headerValue));
+      header.checked = !header.checked;
+    },
+    emitHeaderClickedEvent(headerValue) {
+      this.$emit('header-is-clicked', headerValue);
     },
   }
 }

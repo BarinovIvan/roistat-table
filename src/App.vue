@@ -3,7 +3,11 @@
     <transition name="fade" mode="out-in">
       <h2 v-if="users.length === 0" class="not-found-message">Ничего не найдено</h2>
 
-      <users-table v-else :users="users" />
+      <users-table
+        v-else
+        :users="users"
+        @header-is-clicked="changeSortingOption"
+      />
     </transition>
 
     <custom-button @click="showDialog = true" class="add-user-button">Добавить пользователя</custom-button>
@@ -31,6 +35,8 @@ export default {
       showDialog: false,
       users: [],
       flatUsers: [],
+      sortingOption: '',
+      sortingOrder: 1
     }
   },
   created() {
@@ -59,11 +65,33 @@ export default {
         this.users.push(formData);
       }
 
+      if (this.sortingOption !== '') this.sortUsers()
+
       this.unwrapUserArray()
-      saveDataToLS('users', JSON.stringify(this.users))
+      saveDataToLS('users', JSON.stringify(this.users));
     },
+    changeSortingOption(option) {
+      if (this.sortingOption === option) {
+        this.sortingOrder *= -1;
+      } else {
+        this.sortingOrder = 1;
+        this.sortingOption = option;
+      }
+
+      this.sortUsers();
+    },
+    sortUsers() {
+      this.users.sort((a, b) => {
+        const optionA = a[this.sortingOption];
+        const optionB = b[this.sortingOption];
+
+        const comparisonValue = optionA.localeCompare(optionB);
+        return comparisonValue * this.sortingOrder;
+      });
+    },
+
     unwrapUserArray() {
-      this.flatUsers = unwrapArray(this.users)
+      this.flatUsers = unwrapArray(this.users);
     },
     toggleDialog() {
       this.showDialog = !this.showDialog;
