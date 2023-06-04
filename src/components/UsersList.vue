@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import {getUsersListPaddingMultiplier} from "../helpers/usersTableHeader";
+
 export default {
   name: "UsersList",
   props: {
@@ -38,8 +40,6 @@ export default {
     return {
       isExpanded: false,
       userNamePadding: null,
-      MOBILE_PADDING_MULTIPLIER: 10,
-      DESKTOP_PADDING_MULTIPLIER: 20,
     };
   },
   computed: {
@@ -64,15 +64,11 @@ export default {
     },
 
     getUserNamePadding: function() {
-      const PADDING_MULTIPLIER = this.getPaddingMultiplier();
+      const PADDING_MULTIPLIER = getUsersListPaddingMultiplier();
 
       this.userNamePadding = { paddingLeft: `${this.level * PADDING_MULTIPLIER}px` };
     },
-    getPaddingMultiplier() {
-      return window.innerWidth > 768 ?
-        this.DESKTOP_PADDING_MULTIPLIER :
-        this.MOBILE_PADDING_MULTIPLIER;
-    }
+
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.getUserNamePadding)

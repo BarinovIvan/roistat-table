@@ -4,17 +4,22 @@
 
     <div class="add-user-form__input">
       <label for="name">Имя:</label>
-      <input type="text" id="name" name="name" v-model="formData.name">
+      <input v-model="formData.name" type="text" id="name" name="name">
     </div>
 
     <div class="add-user-form__input">
       <label for="phone">Телефон:</label>
-      <input type="tel" id="phone" name="phone" v-model="formData.phone">
+      <input v-model="formData.phone" type="tel" id="phone" name="phone">
     </div>
 
     <div class="add-user-form__input">
       <label for="parent">Начальник:</label>
-      <select id="parent" name="parent" v-model="formData.parent">
+      <select
+        v-model="formData.parent"
+        id="parent"
+        name="parent"
+        :disabled="flatUsers.length === 0"
+      >
         <option v-for="user in flatUsers" :value="user.id">{{ user.name }}</option>
       </select>
     </div>

@@ -10,11 +10,11 @@
       />
     </transition>
 
-    <custom-button @click="showDialog = true" class="add-user-button">Добавить пользователя</custom-button>
+    <custom-button @click="toggleDialog" class="add-user-button">Добавить пользователя</custom-button>
 
     <transition name="fade">
       <custom-dialog v-if="showDialog" @close-dialog="toggleDialog">
-        <add-user-form :flat-users="flatUsers" @add-user="addUser($event)" />
+        <add-user-form :flat-users="flatUsers" @add-user="createUser($event)" />
       </custom-dialog>
     </transition>
   </div>
@@ -35,7 +35,7 @@ export default {
       showDialog: false,
       users: [],
       flatUsers: [],
-      sortingOption: '',
+      sortingOption: null,
       sortingOrder: 1
     }
   },
@@ -46,9 +46,17 @@ export default {
     this.unwrapUserArray();
   },
   methods: {
-    addUser(formData) {
+    createUser(formData) {
       this.toggleDialog();
 
+      this.addUser(formData, this.users);
+
+      this.unwrapUserArray()
+      saveDataToLS('users', JSON.stringify(this.users));
+
+      if (this.sortingOption !== null) this.sortUsers()
+    },
+    addUser(formData, users) {
       const areAllPropertiesEmpty = Object.values(formData).every(value => value === null);
       if (areAllPropertiesEmpty) return;
 
@@ -56,19 +64,14 @@ export default {
 
       if (formData.parent) {
         const parentId = formData.parent;
-        const parentUser = findUserById(parentId, this.users);
+        const parentUser = findUserById(parentId, users);
 
         if (parentUser) {
           parentUser.children.push(formData);
         }
       } else {
-        this.users.push(formData);
+        users.push(formData);
       }
-
-      if (this.sortingOption !== '') this.sortUsers()
-
-      this.unwrapUserArray()
-      saveDataToLS('users', JSON.stringify(this.users));
     },
     changeSortingOption(option) {
       if (this.sortingOption === option) {
