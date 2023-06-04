@@ -1,11 +1,11 @@
 <template>
   <div id="app">
     <transition name="fade" mode="out-in">
-      <h2 v-if="users.length === 0" class="not-found-message">Ничего не найдено</h2>
+      <h2 v-if="sortedUsers.length === 0" class="not-found-message">Ничего не найдено</h2>
 
       <users-table
         v-else
-        :users="users"
+        :users="sortedUsers"
         @header-is-clicked="changeSortingOption"
       />
     </transition>
@@ -34,9 +34,17 @@ export default {
     return {
       showDialog: false,
       users: [],
+      sortedUsers: [],
       flatUsers: [],
       sortingOption: null,
       sortingOrder: 1
+    }
+  },
+  watch: {
+    users() {
+      this.sortedUsers = JSON.parse(JSON.stringify(this.users));
+
+      if (this.sortingOption !== null) this.sortUsers();
     }
   },
   created() {
@@ -54,7 +62,6 @@ export default {
       this.unwrapUserArray()
       saveDataToLS('users', JSON.stringify(this.users));
 
-      if (this.sortingOption !== null) this.sortUsers()
     },
     addUser(formData, users) {
       const areAllPropertiesEmpty = Object.values(formData).every(value => value === null);
@@ -92,7 +99,6 @@ export default {
         return comparisonValue * this.sortingOrder;
       });
     },
-
     unwrapUserArray() {
       this.flatUsers = unwrapArray(this.users);
     },

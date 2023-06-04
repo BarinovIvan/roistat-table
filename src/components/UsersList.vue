@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import {getUsersListPaddingMultiplier} from "../helpers/usersTableHeader";
+import {getUsersListPaddingMultiplier} from "../helpers/usersTableHelper";
 
 export default {
   name: "UsersList",
