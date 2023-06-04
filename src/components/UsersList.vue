@@ -13,8 +13,8 @@
         <users-list
           v-for="childUser in user.children"
           :user="childUser"
-          :level="level + 1"
           :key="childUser.id"
+          :level="level + 1"
         />
       </template>
     </transition-group>

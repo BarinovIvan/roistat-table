@@ -3,7 +3,7 @@
     <table-header class="users-table__row" />
 
     <main>
-      <users-list v-for="user in users" :user="user" />
+      <users-list v-for="user in users" :key="user.id" :user="user" />
     </main>
   </section>
 </template>
@@ -28,11 +28,6 @@ export default {
 .users-table {
   max-width: 600px;
   margin: 0 auto;
-}
-
-@media  (max-width: 768px) {
-  .users-table {
-    padding: 10px;
-  }
+  padding: 10px;
 }
 </style>
