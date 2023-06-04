@@ -36,3 +36,11 @@ export const unwrapArray = (array) => {
 
   return result;
 }
+
+export const getDataFromLS = (propertyName) => {
+  return JSON.parse(localStorage.getItem(propertyName));
+}
+
+export const saveDataToLS = (propertyName, value) => {
+  localStorage.setItem(propertyName, value);
+}
